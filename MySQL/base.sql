@@ -155,6 +155,7 @@ ADD CONSTRAINT `fk_id_discografica`
 
 
 #Insert a las tablas
+
 insert into discografica values('1','Sony Music');
 insert into discografica values('2','Island Records');
 insert into discografica values('3','ISO RECORDS');
@@ -292,42 +293,4 @@ insert into album_tema values('2','15');
 insert into album_tema values('2','16');
 insert into album_tema values('2','17');
 insert into album_tema values('2','18');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
