@@ -1,0 +1,611 @@
+#Script de MySQL Workbench para generar Base de datos del TP.
+
+************************************************************
+Datos de conexión al hosting:
+
+Host: vps-2446628-x.dattaweb.com
+Puerto: 3306
+user: x050vm10_BD
+password: Practico2022
+
+Bases:
+x050vm10_base1 
+x050vm10_base2
+
+*************************************************************
+
+
+Para probarlo localmente:
+*************************
+
+#Crear Database:
+
+CREATE DATABASE x050vm10_base1
+DEFAULT CHARACTER SET 'utf8mb4'
+COLLATE 'utf8mb4_0900_ai_ci';
+
+
+#Seleccionamos Database:
+
+use dx050vm10_base1;
+
+#Crear Tablas
+
+CREATE TABLE `x050vm10_base1`.`album` (
+  `id_album` INT NOT NULL AUTO_INCREMENT,
+  `codigo_album` VARCHAR(45) NOT NULL,
+  `nombre` VARCHAR(50) NOT NULL,
+  `cant_temas` INT NOT NULL,
+  `fecha_lanzamiento` YEAR(4) NOT NULL,
+  `precio` decimal(65,2) NOT NULL,
+  `cantidad` INT NOT NULL,
+  `caratula` VARCHAR(200) NULL,
+  PRIMARY KEY (`id_album`));
+
+
+CREATE TABLE `x050vm10_base1`.`interprete` (
+  `id_interprete` INT NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(50) NOT NULL,
+  `apellido` VARCHAR(50) NULL,
+  `foto` VARCHAR(250) NULL,
+  PRIMARY KEY (`id_interprete`));
+
+
+CREATE TABLE `x050vm10_base1`.`genero` (
+  `id_genero` INT NOT NULL AUTO_INCREMENT,
+  `nombre_genero` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`id_genero`));
+
+
+CREATE TABLE `x050vm10_base1`.`discografica` (
+  `id_discografica` INT NOT NULL AUTO_INCREMENT,
+  `nombre_disco` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`id_discografica`));
+
+
+CREATE TABLE `x050vm10_base1`.`formato` (
+  `id_formato` INT NOT NULL AUTO_INCREMENT,
+  `tipo_formato` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`id_formato`));
+
+
+CREATE TABLE `x050vm10_base1`.`tema` (
+  `id_tema` INT NOT NULL AUTO_INCREMENT,
+  `titulo` VARCHAR(50) NOT NULL,
+  `duracion` TIME NOT NULL,
+  `autor` VARCHAR(100) NOT NULL,
+  `compositor` VARCHAR(150) NOT NULL,
+  `track` INT NULL,
+  PRIMARY KEY (`id_tema`));
+
+
+CREATE TABLE `x050vm10_base1`.`album_interprete` (
+  `id_album` INT NOT NULL,
+  `id_interprete` INT NOT NULL,
+  PRIMARY KEY (`id_album`, `id_interprete`));
+
+
+ALTER TABLE `x050vm10_base1`.`album_interprete` 
+ADD CONSTRAINT `fk_id_album`
+  FOREIGN KEY (`id_album`)
+  REFERENCES `x050vm10_base1`.`album` (`id_album`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `x050vm10_base1`.`album_interprete` 
+ADD CONSTRAINT `fk_id_interprete`
+  FOREIGN KEY (`id_interprete`)
+  REFERENCES `x050vm10_base1`.`interprete` (`id_interprete`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+
+CREATE TABLE `x050vm10_base1`.`album_tema` (
+  `id_album` INT NOT NULL,
+  `id_tema` INT NOT NULL,
+  PRIMARY KEY (`id_album`, `id_tema`));
+
+ALTER TABLE `x050vm10_base1`.`album_tema` 
+ADD CONSTRAINT `fk_idalbum`
+  FOREIGN KEY (`id_album`)
+  REFERENCES `x050vm10_base1`.`album` (`id_album`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `x050vm10_base1`.`album_tema` 
+ADD CONSTRAINT `fk_idtema`
+  FOREIGN KEY (`id_tema`)
+  REFERENCES `x050vm10_base1`.`tema` (`id_tema`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+
+CREATE TABLE `x050vm10_base1`.`album_genero` (
+  `id_album` INT NOT NULL,
+  `id_genero` INT NOT NULL,
+  PRIMARY KEY (`id_album`, `id_genero`));
+
+ALTER TABLE `x050vm10_base1`.`album_genero` 
+ADD CONSTRAINT `fk_album`
+  FOREIGN KEY (`id_album`)
+  REFERENCES `x050vm10_base1`.`album` (`id_album`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+ALTER TABLE `x050vm10_base1`.`album_genero` 
+ADD CONSTRAINT `fk_id_genero`
+  FOREIGN KEY (`id_genero`)
+  REFERENCES `x050vm10_base1`.`genero` (`id_genero`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+
+
+CREATE TABLE `x050vm10_base1`.`album_formato` (
+  `id_album` INT NOT NULL,
+  `id_formato` INT NOT NULL,
+  PRIMARY KEY (`id_album`, `id_formato`));
+
+ALTER TABLE `x050vm10_base1`.`album_formato` 
+ADD CONSTRAINT `fk_id_album_af`
+  FOREIGN KEY (`id_album`)
+  REFERENCES `x050vm10_base1`.`album` (`id_album`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+
+ALTER TABLE `x050vm10_base1`.`album_formato` 
+ADD CONSTRAINT `fk_id_formato_af`
+  FOREIGN KEY (`id_formato`)
+  REFERENCES `x050vm10_base1`.`formato` (`id_formato`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+
+
+ALTER TABLE `x050vm10_base1`.`album` 
+ADD COLUMN `id_discografia` INT NOT NULL AFTER `id_album`;
+
+ALTER TABLE `x050vm10_base1`.`album` 
+ADD CONSTRAINT `fk_id_discografica`
+  FOREIGN KEY (`id_discografia`)
+  REFERENCES `x050vm10_base1`.`discografica` (`id_discografica`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+
+INSERT A LAS TABLAS:
+********************
+
+insert into discografica values('1','Sony Music');
+insert into discografica values('2','Island Records');
+insert into discografica values('3','ISO RECORDS');
+insert into discografica values('4','EMI');
+insert into discografica values('5','ROC NATION');
+insert into discografica values('6','Roc-A-Fella Records');
+insert into discografica values('7','AMARU ENTERTAIMENT');
+insert into discografica values('8','PARLOPHONE');
+insert into discografica values('9','Island Records');
+insert into discografica values('10','Elektra Records');
+insert into discografica values('11','RHINO RECORDS');
+insert into discografica values('12','KAREN RECORDS');
+insert into discografica values('13','BMG');
+insert into discografica values('14','UNIVERSAL');
+insert into discografica values('15','AMIGA');
+insert into discografica values('16','VERTIGO');
+insert into discografica values('17','EPIC');
+insert into discografica values('18','COLUMBIA');
+insert into discografica values('19','Capitol Records');
+insert into discografica values('20','Discos CNR Chile');
+
+insert into album values('1','2','602448064851','Holy Fvck','16','2022','2560.55','98','https://i.discogs.com/sROffi3nsEcQd3K7LLFCWM9NjS6TXpNY5BpA6jFjdVs/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTI0MjQ3/MjIzLTE2NjA5Mzgy/NjItNzIyOC5qcGVn.jpeg');
+insert into album values('2','1','194397420524','MAS CARO QUE AYER','18','2021','300.48','16','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlSVH7Moy8fgjMpumDJWpnL7iMnBr44entXRZ-ip96V39kwFN2bMXJq-YVz7M-iZXDAP0&usqp=CAU');
+insert into album values('3','3','508222 0','HEATHEN','12','2002','25.36','25','https://i.discogs.com/zPO_rrlppom0sAP_rgOnxCJznJqqw3-YW4NjqTYwtKI/rs:fit/g:sm/q:90/h:599/w:599/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTU5NjUx/MS0xMjI5NjM3NDkx/LmpwZWc.jpeg');
+insert into album values('4','4','0034553235','BLACK TIE WHITE NOISE','4','2003','142.37','47','https://i.discogs.com/2VdYF1zlYBIkgYAQu0P-e0GaoHryN6rRfqa6pQzw-UE/rs:fit/g:sm/q:90/h:599/w:594/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTEwNjY2/NjQtMTE4OTUzOTUw/MS5qcGVn.jpeg');
+insert into album values('5','5','B0027184_02','04:44','13','2017','1500','59','https://i.discogs.com/mY5jx7tLrGpIQvJKyfD8L0-PulDev7PgEXBajZ1HwCQ/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTEwNTM3/MTY1LTE1Njg2Njk4/NTQtMzAwMS5qcGVn.jpeg');
+insert into album values('6','6','B0004813_02','LATE REGISTRATION','21','2005','123','1','https://i.discogs.com/VaGAJ7bFhiP1JY5nrQDFGGw2mmbU7OH0xm_j9msSaNM/rs:fit/g:sm/q:90/h:592/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTQ5NDE2/OS0xNTAxMjY5NDM1/LTMxNzIuanBlZw.jpeg');
+insert into album values('7','7','B0001533-02','Resurrection','14','2003','14.78','3','https://i.discogs.com/pWMx5ErnYekeFomn1R8X4SjOFRBVm6csm5LUtcLuvLk/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTI1MTY5/MS0xMzk3ODgxMDU4/LTY3NzQuanBlZw.jpeg');
+insert into album values('8','1','88697567792','Fuerza Natural','14','2009','151','345','https://i.discogs.com/Ng_TF7utB2rOpjVQDxssTwlERny9eKYBZS2XFFRpu7U/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTI2Mjkx/OTgtMTQyODI1OTM5/Ni05MzIyLmpwZWc.jpeg');
+insert into album values('9','8','190296666988','MUSIC OF THE SPHERES','12','2021','169','49','');
+insert into album values('10','2','0005797700','SONGS OF EXPERIENCE','17','2017','500','0','');
+insert into album values('11','10','7A0F8109','AND JUSTICE FOR ALL','9','1988','320','0','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTl3PUIPfPPG2ZhxOK66BqaisoFd2-L-dYCXqMMax-xwYoRmtTGPT1BAyg3hhKHyAWYG8E&usqp=CAU');
+insert into album values('12','11','R2671074','101','20','2021','316.59','57','https://i.discogs.com/ac4UDphQS0Z834SOOdufDWjxQceEN2hEVvVfylHBeWE/rs:fit/g:sm/q:90/h:592/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTIxMjI0/MjkwLTE2Mzg2MzA3/MTAtODQ4NS5qcGVn.jpeg');
+insert into album values('13','1','19439885311','DOPAMINA','13','2021','516','12','https://i.discogs.com/A3eSclNDe4ciuX6W7DQJJ-5H6lyoKVzqFlXcn9JZPR0/rs:fit/g:sm/q:90/h:520/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTE4NzUx/MzQyLTE2MjExNjY4/NTItNzI4Mi5qcGVn.jpeg');
+insert into album values('14','1','190759900925','ADN','16','2019','22','13','https://i.discogs.com/G2JgS66JLJT4a5isr-h14FbOUPfupHOLaa88jmNLOK8/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTE0Njkw/NDE0LTE1Nzk3MDkx/MjUtMjkyNi5qcGVn.jpeg');
+insert into album values('15','1','88697567784-2','THE LAST','18','2009','34','46','https://i.discogs.com/JyMBDcKmCftrPK78lNB4cxW0mWuCfbX2hZLbOSk-lTI/rs:fit/g:sm/q:90/h:540/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTEwMDc1/ODkwLTE0OTExOTA5/MTgtMjk3Mi5qcGVn.jpeg');
+insert into album values('16','1','MLMC 0554','GODS PROJECT','15','2005','28','48','https://i.discogs.com/3VNdvMaIP7R_IYeMxvQ-CTOoURdsKrsbKKQlSgY04Y8/rs:fit/g:sm/q:90/h:569/w:568/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTM3NjM5/NTEtMTM0MzQ1NzM4/Ny03OTY2LmpwZWc.jpeg');
+insert into album values('17','12','K-136','BACHATA ROSA','10','1990','34','58','https://i.discogs.com/j-kpoILafNGHjoryjd2sOAs4iXOelNwUSoxLd1_hobU/rs:fit/g:sm/q:90/h:600/w:598/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTM2Nzgy/MjgtMTM0MDEwNzI5/OS0zMTc0LmpwZWc.jpeg');
+insert into album values('18','13','7421-80227-2','ABRAZAME MUY FUERTE','12','2000','34','69','https://i.discogs.com/7XfzRQbUGcFurhFWVLDpYC7Mxay-UqyT5b-abYrK7nc/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTEwNDAw/NDExLTE1MjQzNTUz/ODgtMzgyMS5qcGVn.jpeg');
+insert into album values('19','14','0000050102','CORAZON DE PAPEL','12','2000','67','22','https://i.discogs.com/v5PCgaS2Ga_5lCsum_mEuuIfKxTnOwaQf4sSxdwBaDU/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTExNDc5/MjQ0LTE1MTcwNjg2/MjAtNjQxMC5qcGVn.jpeg');
+insert into album values('20','15','056 078','Phil Collins','10','1984','98','1','https://i.discogs.com/tE2BtkaUnn2n3HKMxJ-FQYF8PsHYXsJxsREWyS_OErM/rs:fit/g:sm/q:90/h:600/w:599/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTY3Mzc4/MS0xNTU5MjMwMzc4/LTk1ODAuanBlZw.jpeg');
+insert into album values('21','16','814 287-1','Genesis','9','1983','247','3','https://i.discogs.com/53qsKzEyTkh_KxRmXgWy8mAxDfATHtSxasN1KPYFPXo/rs:fit/g:sm/q:90/h:593/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTE2MDU0/MzQtMTY2MjY3NDMw/OC02OTczLmpwZWc.jpeg');
+insert into album values('22','4','0000047266','Thriller','9','1982','1320','11','https://i.discogs.com/t3Gzrzp1_DT27bSfVynl5bCmqWqddfUT5ohPHuUDtyE/rs:fit/g:sm/q:90/h:600/w:597/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTE2NTk1/MjctMTY2NDIwNDcy/Mi05NDU4LmpwZWc.jpeg');
+insert into album values('23','18','COL 481367 1','Daydream','12','1995','12','2','https://i.discogs.com/GdNcjvx_s5QytpgbThAyx8jEIW8saXBTaky5Z5joiio/rs:fit/g:sm/q:90/h:592/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTE1NDQ0/MzEtMTQzNTcwMzg0/OS0xMDAyLmpwZWc.jpeg');
+insert into album values('24','19','5 099907 142710','Charm School','12','2011','987','0','https://i.discogs.com/P-Ty0E8Y5dXZBmk14deaOwyt58eiQ4vPZ3UnsJlFy0w/rs:fit/g:sm/q:90/h:350/w:350/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTI3MjI2/MDUtMTI5ODExOTgy/Ny5qcGVn.jpeg');
+insert into album values('25','20','0000017720','Live In Sydney 1991','10','2016','624','1','https://i.discogs.com/abWajKVPDOV28DxzUDwxCCUYqCXoKQMR1tvvBQIZQzU/rs:fit/g:sm/q:90/h:452/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTkxNjI4/NjEtMTQ3NTg5MTc1/OS0yNzIxLmpwZWc.jpeg');
+
+insert into genero values('1','Latino');
+insert into genero values('2','Pop');
+insert into genero values('3','Rock');
+insert into genero values('4','Soul');
+insert into genero values('5','Bachata');
+insert into genero values('6','Hip Hop');
+insert into genero values('7','Electrónica');
+insert into genero values('8','Reguetton');
+insert into genero values('9','Cumbia');
+
+insert into formato values('1','CD');
+insert into formato values('2','Cassette');
+insert into formato values('3','Disco Vinilo');
+
+insert into interprete values('1','MANUEL','TURIZO','https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Manuel_Turizo_in_2020.jpg/330px-Manuel_Turizo_in_2020.jpg');
+insert into interprete values('2','AVENTURA','','http://www.tejedaturistica.com/wp-content/uploads/Aventura-1.jpg');
+insert into interprete values('3','JUAN LUIS','GUERRA','https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Juan_Luis_Guerra_AC.jpg/330px-Juan_Luis_Guerra_AC.jpg');
+insert into interprete values('4','JUAN','GABRIEL','');
+insert into interprete values('5','LOS CHARROS','','');
+insert into interprete values('6','GERARDO','ORTIZ','https://www.infobae.com/new-resizer/Somi33CCMe6U2nPJvI6I4aNqPTo=/992x606/filters:format(webp):quality(85)/s3.amazonaws.com/arc-wordpress-client-uploads/infobae-wp/wp-content/uploads/2019/04/11093115/gerardo_ortiz_demanda_impuestos.jpg');
+insert into interprete values('7','Phil','Collins','https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Phil_Collins_1_%28cropped%29.jpg/330px-Phil_Collins_1_%28cropped%29.jpg');
+insert into interprete values('8','Genesis','','');
+insert into interprete values('9','Michael','Jackson','https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Michael_Jackson_Dangerous_World_Tour_1993.jpg/330px-Michael_Jackson_Dangerous_World_Tour_1993.jpg');
+insert into interprete values('10','Mariah','Carey','https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Mariah_Carey_WBLS_2018_Interview_4.jpg/375px-Mariah_Carey_WBLS_2018_Interview_4.jpg');
+insert into interprete values('11','Roxette','','https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Roxette-Roxette_at_Bospop_festival_The_Netherlands_2011.jpg/375px-Roxette-Roxette_at_Bospop_festival_The_Netherlands_2011.jpg');
+insert into interprete values('12','DEMI','LOVATO','https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Demi_Lovato_Interview_Feb_2020.png/330px-Demi_Lovato_Interview_Feb_2020.png');
+insert into interprete values('13','DAVID','BOWIE','https://upload.wikimedia.org/wikipedia/commons/e/e8/David-Bowie_Chicago_2002-08-08_photoby_Adam-Bielawski-cropped.jpg');
+insert into interprete values('14','JAY_Z','','');
+insert into interprete values('15','KAYNE','WEST','https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Kanye_West_at_the_2009_Tribeca_Film_Festival_%28cropped%29.jpg/330px-Kanye_West_at_the_2009_Tribeca_Film_Festival_%28cropped%29.jpg');
+insert into interprete values('16','TUPAC','','https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSMkjmjma13gyyyFQkKeCzVpiyKUp6eMxxhetcvKG9Fqyru2Fw1');
+insert into interprete values('17','Gustavo','Cerati','https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Gustavo_Cerati.jpg/330px-Gustavo_Cerati.jpg');
+insert into interprete values('18','COLDPLAY','','https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Coldplay_-_December_2008.jpg/330px-Coldplay_-_December_2008.jpg');
+insert into interprete values('19','U2','','https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/U2_on_Joshua_Tree_Tour_2017_Brussels_8-1-17.jpg/450px-U2_on_Joshua_Tree_Tour_2017_Brussels_8-1-17.jpg');
+insert into interprete values('20','METALLICA','','https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Metallica_at_The_O2_Arena_London_2008.jpg/450px-Metallica_at_The_O2_Arena_London_2008.jpg');
+insert into interprete values('21','DEPECHE MODE','','');
+
+insert into tema values('1','Más Caro, que ayer (versión norteño banda)','02:41','Gerardo Ortiz','Gerardo Ortiz','1');
+insert into tema values('2','El Omega','02:09','Gerardo Ortiz','Gerardo Ortiz','2');
+insert into tema values('3','Sin alucinarme','02:22','Gerardo Ortiz','Gerardo Ortiz','3');
+insert into tema values('4','Esa noche','03:04','Gerardo Ortiz','Gerardo Ortiz','4');
+insert into tema values('5','El Supremo','02:33','Gerardo Ortiz','Gerardo Ortiz','5');
+insert into tema values('6','Jorgito Corona','03:31','Gerardo Ortiz','Gerardo Ortiz','6');
+insert into tema values('7','El Uno','02:51','Gerardo Ortiz','Gerardo Ortiz','7');
+insert into tema values('8','Dos extraños','02:25','Gerardo Ortiz','Gerardo Ortiz','8');
+insert into tema values('9','El Rubio','02:21','Gerardo Ortiz','Gerardo Ortiz','9');
+insert into tema values('10','Elefante blanco','02:30','Gerardo Ortiz','Gerardo Ortiz','10');
+insert into tema values('11','Demi Ortiz','02:55','Gerardo Ortiz','Gerardo Ortiz','11');
+insert into tema values('12','Callada','02:37','Gerardo Ortiz','Gerardo Ortiz','12');
+insert into tema values('13','El Chavo','02:25','Gerardo Ortiz','Gerardo Ortiz','13');
+insert into tema values('14','Rápido me muevo','02:27','Gerardo Ortiz','Gerardo Ortiz','14');
+insert into tema values('15','El sombrero no se cae','03:15','Gerardo Ortiz','Gerardo Ortiz','15');
+insert into tema values('16','Más caro, que ayer','02:27','Gerardo Ortiz','Gerardo Ortiz','16');
+insert into tema values('17','Otra borrachera','02:18','Gerardo Ortiz','Gerardo Ortiz','17');
+insert into tema values('18','Otra borrachera (versión mariachi)','02:18','Gerardo Ortiz','Gerardo Ortiz','18');
+insert into tema values('19','Freak (con Yungblud )','02:36','Demi Lovato feat. YUNGBLUD','Laura Veltz Michael Pollack dominic harrison','1');
+insert into tema values('20',' Piel de mis dientes ','02:42','Demi Lovato','Veltz Aaron Puckett','2');
+insert into tema values('21','sustancia','02:40','Demi Lovato','Veltz Jordan Laúdes','3');
+insert into tema values('22','Eat Me (con Royal & the Serpent )','03:00','Demi Lovato feat. Royal & the Serpent','Veltz Ryan Santiago','4');
+insert into tema values('23','Santo Fvck','02:34','Demi Lovato','Veltz Salem Ilese Davern','5');
+insert into tema values('24','29','02:43','Demi Lovato','Veltz Sean Douglas','6');
+insert into tema values('25','Final feliz','03:49','Demi Lovato','Veltz laúdes mitch alan','7');
+insert into tema values('26','Cielo','02:27','Demi Lovato','Veltz puckett','8');
+insert into tema values('27','Ciudad de Angeles','02:51','Demi Lovato','Alano laúdes Davern','9');
+insert into tema values('28','Huesos','02:31','Demi Lovato','emily amstrong popurrí siouxsie sean viernes','10');
+insert into tema values('29','Desperdiciado','03:03','Demi Lovato','Veltz douglas','11');
+insert into tema values('30','Reunirse','03:33','Demi Lovato','Veltz douglas','12');
+insert into tema values('31','Amigos muertos','02:57','Demi Lovato','Veltz sam ellis','13');
+insert into tema values('32','Ayúdame (con Dead Sara )','03:23','Demi Lovato feat. Dead Sara','amstrong Popurrí Viernes','14');
+insert into tema values('33','Alimento','03:13','Demi Lovato','Veltz daniel tashian JT Daly','15');
+insert into tema values('34','4 siempre 4 yo','03:43','Demi Lovato','Veltz Alano Susan Joyce','16');
+insert into tema values('35','Sunday','04:45','DAVID BOWIE','DAVID BOWIE','1');
+insert into tema values('36','Cactus','02:55','DAVID BOWIE','BLACK FRANCIS','2');	
+insert into tema values('37','Slip Away','06:05','DAVID BOWIE','DAVID BOWIE','3');
+insert into tema values('38','Slow Burn','04:41','DAVID BOWIE','DAVID BOWIE','4');
+insert into tema values('39','Afraid','03:28','DAVID BOWIE','DAVID BOWIE','5');
+insert into tema values('40','I’ve Been Waiting for You','03:00','DAVID BOWIE','NEIL YOUNGS','6');			
+insert into tema values('41','I Would Be Your Slave','05:14','DAVID BOWIE','DAVID BOWIE','7');	
+insert into tema values('42','I Took a Trip on a Gemini Spaceship','04:07','DAVID BOWIE','NORMAN ONDAN','8');	
+insert into tema values('43','5:15 the Angels Have Gone','05:02','DAVID BOWIE','DAVID BOWIE','9');	
+insert into tema values('44','Everyone Says ‘Hi’','03:58','DAVID BOWIE','DAVID BOWIE','10');	
+insert into tema values('45','A Better Future','04:11','DAVID BOWIE','DAVID BOWIE','11');	
+insert into tema values('46','Heathen (The Rays)','04:18','DAVID BOWIE','DAVID BOWIE','12');	
+insert into tema values('47','Wood Jackson','04:46','DAVID BOWIE','DAVID JONES','13');	
+insert into tema values('48','The Wedding','05:03','DAVID BOWIE','DAVID BOWIE','1');	
+insert into tema values('49','You’ve Been Around','04:44','DAVID BOWIE','Reeves Gabrels','2');	
+insert into tema values('50','I Feel Free','04:52','DAVID BOWIE','Jack Bruce','3');	
+insert into tema values('51','Black Tie White Noise','04:54','DAVID BOWIE','DAVID BOWIE','4');	
+insert into tema values('52','Jump They Say','04:23','DAVID BOWIE','DAVID BOWIE','5');	
+insert into tema values('53','Nite Flights','04:35','DAVID BOWIE','Scott Walker','6');	
+insert into tema values('54','Pallas Athena','04:40','DAVID BOWIE','DAVID BOWIE','7');	
+insert into tema values('55','Miracle Goodnight','04:13','DAVID BOWIE','DAVID BOWIE','8');	
+insert into tema values('56','Don’t Let Me Down & Down','04:53','DAVID BOWIE','Tahra','9');	
+insert into tema values('57','Looking for Lester','05:37','DAVID BOWIE','Nile Rodgers','10');	
+insert into tema values('58','I Know It’s Gonna Happen Someday','04:07','DAVID BOWIE','DAVID BOWIE','11');	
+insert into tema values('59','The Wedding Song','04:36','DAVID BOWIE','DAVID BOWIE','12');	
+insert into tema values('60','Jump They Say (alternate mix)','04:05','DAVID BOWIE','DAVID BOWIE','13');	
+insert into tema values('61','Lucy Can’t Dance','05:48','DAVID BOWIE','DAVID BOWIE','14');	
+insert into tema values('62','Kill Jay Z','02:58','JAY‐Z','JAY‐Z','1');	
+insert into tema values('63','The Story of O.J.','03:52','JAY‐Z','JAY‐Z','2');	
+insert into tema values('64','Smile','04:50','JAY‐Z feat. Gloria Carter','JAY‐Z','3');	
+insert into tema values('65','Caught Their Eyes','03:26','JAY‐Z feat. Frank Ocean','JAY‐Z','4');	
+insert into tema values('66','04:44','04:44','JAY‐Z','JAY‐Z','5');	
+insert into tema values('67','Family Feud','04:11','JAY‐Z feat. Beyoncé','JAY‐Z','6');	
+insert into tema values('68','Bam','03:55','JAY‐Z feat. Damian “Jr. Gong” Marley','JAY‐Z','7');	
+insert into tema values('69','Moonlight','02:24','JAY‐Z','JAY‐Z','8');	
+insert into tema values('70','Marcy Me','02:54','JAY‐Z','JAY‐Z','9');	
+insert into tema values('71','Legacy','02:57','JAY‐Z','JAY‐Z','10');	
+insert into tema values('72','Adnis','02:26','JAY‐Z','JAY‐Z','11');	
+insert into tema values('73','Blue’s Freestyle / We Family','04:23','JAY‐Z','JAY‐Z','12');	
+insert into tema values('74','ManyFacedGod','03:18','JAY‐Z feat. James Blake','JAY‐Z','13');	
+insert into tema values('75','Wake Up Mr. West','00:41','Kanye West','','1');	
+insert into tema values('76','Heard ’Em Say','03:24','Kanye West feat. Adam Levine of Maroon 5','Adam Levine','2');	
+insert into tema values('77','Touch the Sky','03:57','Kanye West feat. Lupe Fiasco','Wasalu Muhammad Jaco- Justin Smith','3');	
+insert into tema values('78','Gold Digger','03:28','Kanye West feat. Jamie Foxx','Kanye West','4');	
+insert into tema values('79','Skit #1','00:34','Kanye West','Kanye West','5');	
+insert into tema values('80','Drive Slow','04:33','Kanye West feat. Paul Wall & GLC','Leonard Harris - Paul Slayton','6');	
+insert into tema values('81','My Way Home','01:44','Kanye West feat. Common','Lonnie Rashid Lynn','7');	
+insert into tema values('82','Crack Music','04:31','Kanye West feat. Game','Kanye West','8');	
+insert into tema values('83','Roses','04:06','Kanye West','Kanye West','9');	
+insert into tema values('84','Bring Me Down','03:19','Kanye West feat. Brandy','Kanye West','10');	
+insert into tema values('85','Addiction','04:27','Kanye West','Kanye West','11');	
+insert into tema values('86','Skit #2','00:31','Kanye West','Kanye West','12');	
+insert into tema values('87','Diamonds From Sierra Leone (remix)','03:53','Kanye West feat. Jay‐Z','DeVon Harris','13');	
+insert into tema values('88','We Major','07:29','Kanye West feat. Nas & Really Doe','Warryn Campbell - Lawrence Smith- Nasir Jones','14');	
+insert into tema values('89','Skit #3','00:24','Kanye West','Kanye West','15');	
+insert into tema values('90','Hey Mama','05:05','Kanye West','Kanye West','16');	
+insert into tema values('91','Celebration','03:18','Kanye West','Kanye West','17');	
+insert into tema values('92','Skit #4','01:19','Kanye West','Kanye West','18');	
+insert into tema values('93','Gone','06:03','Kanye West feat. Consequence & Cam’Ron','Cameron Giles - Dexter Raymond Mills Jr.','19');	
+insert into tema values('94','Diamonds From Sierra Leone','03:59','Kanye West','DeVon Harris','20');	
+insert into tema values('95','Late','03:50','Kanye West','Jeff Bhasker - Shawn Carter','21');	
+insert into tema values('96','Intro','00:05','2Pac / Tupac Shakur','Tupac Shakur','1');	
+insert into tema values('97','Ghost','04:17','2Pac / Tupac Shakur','Marshall Mathers / Luis Resto / Tupac Shakur','2');	
+insert into tema values('98','One Day at a Time','03:44','2Pac / Tupac Shakur feat: Eminem / Outlawz','Henry Garcia / Marshall Mathers / Luis Resto / Tupac Shakur','3');	
+insert into tema values('99','Death Around the Corner','04:07','2Pac / Tupac Shakur','Tupac Shakur','4');	
+insert into tema values('100','Secretz of War','04:13','2Pac / Tupac Shakur','Johnny Jackson / Tupac Shakur / Bruce Washington','5');	
+insert into tema values('101','Runnin (Dying to Live)','03:51','2Pac / Tupac Shakur feat: The Notorious B.I.G.','Marshall Mathers / Luis Resto / Tupac Shakur / Christopher Wallace / Edgar Winter','6');	
+insert into tema values('102','Holler If Ya Hear Me','04:38','2Pac / Tupac Shakur','Tupac Shakur / Barrett Strong / Randy Walker / Norman Whitfield','7');	
+insert into tema values('103','Starin Through My Rear View','05:11','2Pac / Tupac Shakur','Phil Collins / Tupac Shakur / Tyrone Wrice','8');	
+insert into tema values('104','Bury Me a G','04:59','2Pac / Tupac Shakur','Walter Burns / Tyruss Himes / Ernie Isley / Diron Rivers / Tupac Shakur','9');	
+insert into tema values('105','Same Song','03:57','2Pac / Tupac Shakur feat: Digital Underground','Ron Brooks / George Clinton / William Collins / Gregory Jacobs / Tupac Shakur / J.S. Theracon / Jim Vitti','10');	
+insert into tema values('106','Panther Power','04:36','2Pac / Tupac Shakur','Tupac Shakur / Raymond Tyson','11');	
+insert into tema values('107','Str8 Ballin','05:04','2Pac / Tupac Shakur','George Clinton / W.O. Collins / G. Cooper / Tupac Shakur','12');	
+insert into tema values('108','Rebel of the Underground','03:16','2Pac / Tupac Shakur','Gregory Jacobs / Tupac Shakur','13');	
+insert into tema values('109','The Realist Killaz','02:58','2Pac / Tupac Shakur feat: 50 Cent','Calvin Broadus / Curtis Jackson / Tupac Shakur / Bruce Washington','14');	
+insert into tema values('110','a','00:54','Coldplay','Coldplay Max Martin Rik Simpson Daniel Green Federico Vindver Bill Rahko','1');	
+insert into tema values('111','Higher Power','03:27','Coldplay','Coldplay M. Martin Federico Vindver Denise Carite','2');	
+insert into tema values('112','Humankind','04:27','Coldplay','ColdplayM. MartinFederico VindverDenise Carite','3');	
+insert into tema values('113','b','00:54','Coldplay (con Selena Gomez)','ColdplayM. MartinApple MartinOlivia WaitheHolterRahkoLeland Wayne','4');	
+insert into tema values('114','Let Somebody Go','04:02','Coldplay','Coldplay M. Martin CollierParis Strothe rAmber Strother','5');	
+insert into tema values('115','c','03:09','Coldplay con We Are King y Jacob Collier','Coldplay M. MartinR ahko Derek DixieS amuel','6');	
+insert into tema values('116','People of The Pride','03:38','Coldplay','Coldplay M. Martin Rahko Derek Dixie Samuel Falson Jesse Rogg','7');	
+insert into tema values('117','Biutyful','03:13','Coldplay','Coldplay M. Martin Holter','8');	
+insert into tema values('118','d','00:22','Coldplay','Coldplay M. Martin','9');	
+insert into tema values('119','My Universe','03:47','Coldplay (con BTS)','Coldplay M. Martin Holter Rahko','10');	
+insert into tema values('120','e','03:47','Coldplay','Coldplay M. Martin Hopkins','11');	
+insert into tema values('121','Coloratura','10:18','Coldplay','Coldplay M. Martin P. Strother John Metcalfe Rossi','12');	
+insert into tema values('122','Love Is All We Have Left','02:41','U2','Bono / U2','1');	
+insert into tema values('123','Lights of Home','04:16','U2','Bono / Alana Haim / Danielle Haim / Este Haim / Ariel Rechtshaid / U2','2');	
+insert into tema values('124','You re the Best Thing About Me','03:45','U2','Bono / U2','3');	
+insert into tema values('125','Get Out of Your Own Way','03:58','U2','Bono / U2','4');	
+insert into tema values('126','American Soul','04:21','U2','Bono / U2','5');	
+insert into tema values('127','Summer of Love','03:24','U2','Bono / U2','6');	
+insert into tema values('128','Red Flag Day','03:19','U2','Bono / U2','7');	
+insert into tema values('129','The Showman (Little More Better)','03:23','U2','Bono / U2','8');	
+insert into tema values('130','The Little Things That Give You Away','04:55','U2','Bono / U2','9');	
+insert into tema values('131','Landlady','04:01','U2','Bono / U2','10');	
+insert into tema values('132','The Blackout','04:45','U2','Bono / U2','11');	
+insert into tema values('133','Love Is Bigger Than Anything in Its Way','04:00','U2','Bono / U2','12');	
+insert into tema values('134','13 (There Is a Light)','04:19','U2','Bono / U2','13');
+
+insert into album_interprete values('1','12');
+insert into album_interprete values('2','6');
+insert into album_interprete values('3','13');
+insert into album_interprete values('4','13');
+insert into album_interprete values('5','14');
+insert into album_interprete values('6','15');
+insert into album_interprete values('7','16');
+insert into album_interprete values('8','17');
+insert into album_interprete values('9','9');
+insert into album_interprete values('10','19');
+insert into album_interprete values('11','20');
+insert into album_interprete values('12','21');
+insert into album_interprete values('13','1');
+insert into album_interprete values('14','1');
+insert into album_interprete values('15','2');
+insert into album_interprete values('16','2');
+insert into album_interprete values('17','3');
+insert into album_interprete values('18','4');
+insert into album_interprete values('19','5');
+insert into album_interprete values('20','7');
+insert into album_interprete values('21','8');
+insert into album_interprete values('22','18');
+insert into album_interprete values('23','10');
+insert into album_interprete values('24','11');
+insert into album_interprete values('25','11');
+
+insert into album_genero values('1','2');
+insert into album_genero values('2','1');
+insert into album_genero values('3','3');
+insert into album_genero values('4','3');
+insert into album_genero values('5','6');
+insert into album_genero values('6','6');
+insert into album_genero values('7','6');
+insert into album_genero values('8','3');
+insert into album_genero values('9','2');
+insert into album_genero values('9','3');
+insert into album_genero values('10','3');
+insert into album_genero values('11','3');
+insert into album_genero values('12','7');
+insert into album_genero values('13','8');
+insert into album_genero values('14','1');
+insert into album_genero values('15','2');
+insert into album_genero values('15','5');
+insert into album_genero values('16','5');
+insert into album_genero values('17','5');
+insert into album_genero values('18','1');
+insert into album_genero values('19','9');
+insert into album_genero values('20','3');
+insert into album_genero values('21','3');
+insert into album_genero values('22','2');
+insert into album_genero values('23','4');
+insert into album_genero values('24','2');
+insert into album_genero values('25','2');
+
+insert into album_formato values('1','1');
+insert into album_formato values('2','1');
+insert into album_formato values('3','1');
+insert into album_formato values('4','1');
+insert into album_formato values('5','1');
+insert into album_formato values('6','1');
+insert into album_formato values('7','1');
+insert into album_formato values('8','1');
+insert into album_formato values('9','1');
+insert into album_formato values('10','1');
+insert into album_formato values('11','1');
+insert into album_formato values('12','1');
+insert into album_formato values('13','1');
+insert into album_formato values('14','1');
+insert into album_formato values('15','1');
+insert into album_formato values('16','2');
+insert into album_formato values('17','2');
+insert into album_formato values('18','1');
+insert into album_formato values('19','1');
+insert into album_formato values('20','1');
+insert into album_formato values('21','1');
+insert into album_formato values('22','1');
+insert into album_formato values('23','1');
+insert into album_formato values('24','1');
+insert into album_formato values('25','1');
+
+insert into album_tema values('1','19');
+insert into album_tema values('1','20');
+insert into album_tema values('1','21');
+insert into album_tema values('1','22');
+insert into album_tema values('1','23');
+insert into album_tema values('1','24');
+insert into album_tema values('1','25');
+insert into album_tema values('1','26');
+insert into album_tema values('1','27');
+insert into album_tema values('1','28');
+insert into album_tema values('1','29');
+insert into album_tema values('1','30');
+insert into album_tema values('1','31');
+insert into album_tema values('1','32');
+insert into album_tema values('1','33');
+insert into album_tema values('1','34');
+insert into album_tema values('2','1');
+insert into album_tema values('2','2');
+insert into album_tema values('2','3');
+insert into album_tema values('2','4');
+insert into album_tema values('2','5');
+insert into album_tema values('2','6');
+insert into album_tema values('2','7');
+insert into album_tema values('2','8');
+insert into album_tema values('2','9');
+insert into album_tema values('2','10');
+insert into album_tema values('2','11');
+insert into album_tema values('2','12');
+insert into album_tema values('2','13');
+insert into album_tema values('2','14');
+insert into album_tema values('2','15');
+insert into album_tema values('2','16');
+insert into album_tema values('2','17');
+insert into album_tema values('2','18');
+insert into album_tema values('3','35');
+insert into album_tema values('3','36');
+insert into album_tema values('3','37');
+insert into album_tema values('3','38');
+insert into album_tema values('3','39');
+insert into album_tema values('3','40');
+insert into album_tema values('3','41');
+insert into album_tema values('3','42');
+insert into album_tema values('3','43');
+insert into album_tema values('3','44');
+insert into album_tema values('3','45');
+insert into album_tema values('3','46');
+insert into album_tema values('3','47');
+insert into album_tema values('4','48');
+insert into album_tema values('4','49');
+insert into album_tema values('4','50');
+insert into album_tema values('4','51');
+insert into album_tema values('4','52');
+insert into album_tema values('4','53');
+insert into album_tema values('4','54');
+insert into album_tema values('4','55');
+insert into album_tema values('4','56');
+insert into album_tema values('4','57');
+insert into album_tema values('4','58');
+insert into album_tema values('4','59');
+insert into album_tema values('4','60');
+insert into album_tema values('4','61');
+insert into album_tema values('5','62');
+insert into album_tema values('5','63');
+insert into album_tema values('5','64');
+insert into album_tema values('5','65');
+insert into album_tema values('5','66');
+insert into album_tema values('5','67');
+insert into album_tema values('5','68');
+insert into album_tema values('5','69');
+insert into album_tema values('5','70');
+insert into album_tema values('5','71');
+insert into album_tema values('5','72');
+insert into album_tema values('5','73');
+insert into album_tema values('5','74');
+insert into album_tema values('6','75');
+insert into album_tema values('6','76');
+insert into album_tema values('6','77');
+insert into album_tema values('6','78');
+insert into album_tema values('6','79');
+insert into album_tema values('6','80');
+insert into album_tema values('6','81');
+insert into album_tema values('6','82');
+insert into album_tema values('6','83');
+insert into album_tema values('6','84');
+insert into album_tema values('6','85');
+insert into album_tema values('6','86');
+insert into album_tema values('6','87');
+insert into album_tema values('6','88');
+insert into album_tema values('6','89');
+insert into album_tema values('6','90');
+insert into album_tema values('6','91');
+insert into album_tema values('6','92');
+insert into album_tema values('6','93');
+insert into album_tema values('6','94');
+insert into album_tema values('6','95');
+insert into album_tema values('7','96');
+insert into album_tema values('7','97');
+insert into album_tema values('7','98');
+insert into album_tema values('7','99');
+insert into album_tema values('7','100');
+insert into album_tema values('7','101');
+insert into album_tema values('7','102');
+insert into album_tema values('7','103');
+insert into album_tema values('7','104');
+insert into album_tema values('7','105');
+insert into album_tema values('7','106');
+insert into album_tema values('7','107');
+insert into album_tema values('7','108');
+insert into album_tema values('7','109');
+insert into album_tema values('9','110');
+insert into album_tema values('9','111');
+insert into album_tema values('9','112');
+insert into album_tema values('9','113');
+insert into album_tema values('9','114');
+insert into album_tema values('9','115');
+insert into album_tema values('9','116');
+insert into album_tema values('9','117');
+insert into album_tema values('9','118');
+insert into album_tema values('9','119');
+insert into album_tema values('9','120');
+insert into album_tema values('9','121');
+insert into album_tema values('10','122');
+insert into album_tema values('10','123');
+insert into album_tema values('10','124');
+insert into album_tema values('10','125');
+insert into album_tema values('10','126');
+insert into album_tema values('10','127');
+insert into album_tema values('10','128');
+insert into album_tema values('10','129');
+insert into album_tema values('10','130');
+insert into album_tema values('10','131');
+insert into album_tema values('10','132');
+insert into album_tema values('10','133');
+insert into album_tema values('10','134');
