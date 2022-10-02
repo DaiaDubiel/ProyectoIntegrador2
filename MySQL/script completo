@@ -9,8 +9,8 @@ user: x050vm10_BD
 password: Practico2022
 
 Bases:
-x050vm10_base1 
-x050vm10_base2
+x050vm10_base1 (ya tiene importado el script descripto más abajo)
+x050vm10_base2 (vacía)
 
 *************************************************************
 
