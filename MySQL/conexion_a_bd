@@ -1,0 +1,23 @@
+import mysql.connector
+
+try:
+    conexion = mysql.connector.connect(
+        host = 'vps-2446628-x.dattaweb.com',
+        port = 3306,
+        user = 'x050vm10_BD',
+        password = 'Practico2022',
+        database = 'x050vm10_base1'
+    )
+    if conexion.is_connected():
+        print("conexión exitosa")
+
+        sqlSelect ="SELECT * FROM discografica"  
+
+        cursor = conexion.cursor()
+        cursor.execute(sqlSelect)
+        resultadoSQL = cursor.fetchall()
+        for dato in resultadoSQL:
+            print(dato)
+    
+except:
+    print("no se pudo conectar")
