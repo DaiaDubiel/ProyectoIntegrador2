@@ -26,6 +26,6 @@ integrante.
 Acompañamiento a cargo de profesor tutor designado.
 - Exposición grupal y explicación del software creado por parte del equipo de trabajo,
 indicando sus funcionalidades, al finalizar el proyecto.
--
+
 (*) Por innovación se entiende cualquier tipo de mejora propuesta por parte del equipo al trabajo práctico, a ser
 posible de realizar dentro de los plazos posibles.
